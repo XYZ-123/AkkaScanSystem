@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using YouScanTestAssesment.Strategy;
+
+namespace YouScanTestAssesment.Messages
+{
+    public class SetPricingMessage
+    {
+        public SetPricingMessage(ItemPricing pricing)
+        {
+            Pricing = pricing;
+        }
+        public ItemPricing Pricing { get; private set; }
+    }
+}
