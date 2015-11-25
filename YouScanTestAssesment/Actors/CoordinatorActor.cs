@@ -13,6 +13,7 @@ namespace YouScanTestAssesment.Actors
     {
         private PricingStrategy _strategy;
         private Dictionary<string, IActorRef> _calcActors = new Dictionary<string, IActorRef>();
+
         public CoordinatorActor()
         {
             Receive<SetStrategyMessage>(message => HandleSetStrategyMessage(message));
