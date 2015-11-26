@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="Actors\CalculatingActor.cs" />
     <Compile Include="Actors\CoordinatorActor.cs" />
+    <Compile Include="Calculator.cs" />
+    <Compile Include="Contracts\ICalculator.cs" />
     <Compile Include="Messages\AmountMessage.cs" />
     <Compile Include="Messages\CalculateMessage.cs" />
     <Compile Include="Messages\ScanMessage.cs" />

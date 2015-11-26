@@ -1,9 +1,8 @@
 ﻿using Akka.Actor;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Akka.DI.Core;
 using YouScanTestAssesment.Messages;
 using YouScanTestAssesment.Strategy;
 
@@ -12,7 +11,7 @@ namespace YouScanTestAssesment.Actors
     public class CoordinatorActor: ReceiveActor
     {
         private PricingStrategy _strategy;
-        private Dictionary<string, IActorRef> _calcActors = new Dictionary<string, IActorRef>();
+        private readonly Dictionary<string, IActorRef> _calcActors = new Dictionary<string, IActorRef>();
 
         public CoordinatorActor()
         {
@@ -47,29 +46,33 @@ namespace YouScanTestAssesment.Actors
             {
                 return _calcActors[Id];
             }
-            
-            var actorRef = Context.ActorOf(Props.Create<CalculatingActor>(() => new CalculatingActor(_strategy.Strategy[Id])),"CalculatingActor-"+Id);
+
+            var actorProps = Context.DI().Props(typeof (CalculatingActor));
+            var actorRef = Context.ActorOf(actorProps, "CalculatingActor-"+Id);
+
+            if (_strategy.Strategy.ContainsKey(Id))
+            {
+                actorRef.Tell(new SetPricingMessage(_strategy.Strategy[Id]));
+            }
+
             _calcActors.Add(Id, actorRef);
 
             return actorRef;
         }
-        public async Task<double> HandleCalculateMessage(CalculateMessage message)
+        public async Task HandleCalculateMessage(CalculateMessage message)
         {
-            double amount = 0;
+            double amount = 0.0;
+            var sender = Sender;
             var tasks = new List<Task<double>>();
 
             await Task.Run(async () =>
             {
-                foreach(var actor in _calcActors)
-                {
-                    var t = actor.Value.Ask<double>(message);
-                    tasks.Add(t);
-                }
+                tasks.AddRange(_calcActors.Select(actor => actor.Value.Ask<double>(message)));
                 var results = await Task.WhenAll(tasks);
                 amount = results.Aggregate((res1, res2) => res1 + res2);
             });
                      
-            return amount;
+            sender.Tell(amount, Self);
         }
     }
 }

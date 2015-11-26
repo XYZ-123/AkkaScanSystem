@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YouScanTestAssesment.Strategy;
 
 namespace YouScanTestAssesment.Contracts
 {
-    class ICalculator
+    public interface ICalculator
     {
+        double Calculate(int amount, ItemPricing pricing);
     }
 }
