@@ -1,4 +1,5 @@
-﻿using Akka.Actor;
+﻿using System;
+using Akka.Actor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace YouScanTestAssesment.Actors
 {
     public class CoordinatorActor: ReceiveActor
     {
-        private PricingStrategy _strategy;
+        private PricingStrategy _strategy = PricingStrategy.Default;
         private readonly Dictionary<string, IActorRef> _calcActors = new Dictionary<string, IActorRef>();
 
         public CoordinatorActor()
@@ -63,6 +64,7 @@ namespace YouScanTestAssesment.Actors
         {
             double amount = 0.0;
             var sender = Sender;
+            var self = Self;
             var tasks = new List<Task<double>>();
 
             await Task.Run(async () =>
@@ -72,7 +74,7 @@ namespace YouScanTestAssesment.Actors
                 amount = results.Aggregate((res1, res2) => res1 + res2);
             });
                      
-            sender.Tell(amount, Self);
+            sender.Tell(amount, self);
         }
     }
 }

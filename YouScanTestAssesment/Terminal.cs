@@ -13,7 +13,7 @@ using YouScanTestAssesment.Strategy;
 
 namespace YouScanTestAssesment
 {
-    public class Terminal : ITerminal
+    public class Terminal : ITerminal, IDisposable
     {
         private readonly ActorSystem system;
         private readonly IActorRef coordinatorActor;
@@ -27,7 +27,7 @@ namespace YouScanTestAssesment
 
         public async Task<double> Calculate(bool flush)
         {
-           var result = await coordinatorActor.Ask<double>(new CalculateMessage(flush));
+           var result = await coordinatorActor.Ask<double>(new CalculateMessage(flush), TimeSpan.FromSeconds(2)).ConfigureAwait(false);
            return result;
         }
 
@@ -45,9 +45,15 @@ namespace YouScanTestAssesment
         {
             var builder = new Autofac.ContainerBuilder();
             builder.RegisterType<Calculator>().As<ICalculator>().SingleInstance();
+            builder.RegisterType<CalculatingActor>();
             var container = builder.Build();
 
             var resolver = new AutoFacDependencyResolver(container, system);
+        }
+
+        public void Dispose()
+        {
+            system.Dispose();
         }
     }
 }

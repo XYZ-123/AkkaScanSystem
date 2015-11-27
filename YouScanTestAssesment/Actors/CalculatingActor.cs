@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using YouScanTestAssesment.Contracts;
 using YouScanTestAssesment.Messages;
@@ -34,6 +35,7 @@ namespace YouScanTestAssesment.Actors
         }
         public void HandleCalculateMessage(CalculateMessage message)
         {
+
             var amount = _calculator.Calculate(_positions, _pricing);
 
             if (message.Flush)

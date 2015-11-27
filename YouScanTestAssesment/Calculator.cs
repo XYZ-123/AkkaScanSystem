@@ -12,7 +12,7 @@ namespace YouScanTestAssesment
     {
         public double Calculate(int amount, ItemPricing pricing)
         {
-            double batches = Math.Floor(Convert.ToDouble(amount / pricing.Batch.Quantity));
+            double batches = pricing.Batch.Quantity == 0 ? 0 : Math.Floor(Convert.ToDouble(amount / pricing.Batch.Quantity));
 
             double leftovers = amount - batches * pricing.Batch.Quantity;
 
