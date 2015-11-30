@@ -100,9 +100,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CalculatingActorTests.cs" />
+    <Compile Include="CalculatorTests.cs" />
     <Compile Include="CoordinatorActorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestCalculatorActor.cs" />
+    <Compile Include="TestActors\TestCalculatorActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

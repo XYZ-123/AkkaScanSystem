@@ -32,7 +32,7 @@ namespace YouScanTestAssesment.Actors
             {
                 if(_strategy.Strategy.ContainsKey(actor))
                 {
-                    _calcActors[actor].Tell(new SetPricingMessage(_strategy.Strategy[actor]));
+                    _calcActors[actor].Forward(new SetPricingMessage(_strategy.Strategy[actor]));
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace YouScanTestAssesment.Actors
         {
             var actor = GetOrCreateActor(message.Id);
 
-            actor.Tell(message);
+            actor.Forward(message);
         }
 
         private IActorRef GetOrCreateActor(string Id)
@@ -56,7 +56,7 @@ namespace YouScanTestAssesment.Actors
 
             if (_strategy.Strategy.ContainsKey(Id))
             {
-                actorRef.Tell(new SetPricingMessage(_strategy.Strategy[Id]));
+                actorRef.Forward(new SetPricingMessage(_strategy.Strategy[Id]));
             }
 
             _calcActors.Add(Id, actorRef);

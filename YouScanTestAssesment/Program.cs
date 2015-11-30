@@ -34,6 +34,7 @@ namespace YouScanTestAssesment
                 t.Scan("A");
                 amount = t.Calculate(true).GetAwaiter().GetResult();
                 Console.WriteLine("ABCDABA, price {0}", amount);
+
                 t.Scan("C");
                 t.Scan("C");
                 t.Scan("C");

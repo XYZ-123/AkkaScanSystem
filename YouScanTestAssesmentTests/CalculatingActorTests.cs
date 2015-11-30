@@ -29,7 +29,7 @@ namespace YouScanTestAssesmentTests
         public CalculatingActorTests()
         {
             calcMock = new Mock<ICalculator>();
-            sut = ActorOfAsTestActorRef<CalculatingActorSUT>(()=> new CalculatingActorSUT(calcMock.Object),"sut");
+            sut = ActorOfAsTestActorRef<CalculatingActorSUT>(()=> new CalculatingActorSUT(calcMock.Object), "sut");
         }
 
         [Fact]
@@ -57,12 +57,13 @@ namespace YouScanTestAssesmentTests
         public void ShouldRReturnResult_If_FlushFlagIsReceived()
         {
             var expectedPrice = 1;
+
             string id = "A";
             calcMock.Setup(x => x.Calculate(It.IsAny<int>(), It.IsAny<ItemPricing>())).Returns(expectedPrice);
             var scanMessage = new ScanMessage(id);
-            var actualPricing = new ItemPricing(new BatchPricing(3, 2), 1);
+            var pricing = new ItemPricing(new BatchPricing(3, 2), 1);
 
-            sut.Tell(new SetPricingMessage(actualPricing));
+            sut.Tell(new SetPricingMessage(pricing));
             sut.Tell(scanMessage);
 
             sut.Tell(new CalculateMessage(true));
