@@ -25,12 +25,6 @@ namespace YouScanTestAssesmentTests
     {
         public class CoordinatorActorSUT<T>: CoordinatorActor<T> where T:ReceiveActor
         {
-            public CoordinatorActorSUT()
-            {
-                // Just passing message through
-                //Receive<MessageReceivedMessage>(message => { receivedMessage = message; });
-            }
-
             internal PricingStrategy Strategy => _strategy;
             internal Dictionary<string, IActorRef> Actors => _calcActors;
         }
