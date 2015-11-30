@@ -21,7 +21,7 @@ namespace YouScanTestAssesment.Actors
         public CalculatingActor(ICalculator calculator)
         {
             if (calculator == null)
-                throw new ArgumentException("calculator");
+                throw new ArgumentNullException("calculator");
 
             _calculator = calculator;
             Receive<ScanMessage>(message => HandleScanMessage(message));

@@ -9,10 +9,10 @@ using YouScanTestAssesment.Strategy;
 
 namespace YouScanTestAssesment.Actors
 {
-    public class CoordinatorActor: ReceiveActor
+    public class CoordinatorActor<T>: ReceiveActor where T :ReceiveActor
     {
-        private PricingStrategy _strategy = PricingStrategy.Default;
-        private readonly Dictionary<string, IActorRef> _calcActors = new Dictionary<string, IActorRef>();
+        protected PricingStrategy _strategy = PricingStrategy.Default;
+        protected readonly Dictionary<string, IActorRef> _calcActors = new Dictionary<string, IActorRef>();
 
         public CoordinatorActor()
         {
@@ -23,6 +23,9 @@ namespace YouScanTestAssesment.Actors
 
         public void HandleSetStrategyMessage(SetStrategyMessage message)
         {
+            if (message.Strategy == null)
+                throw new ArgumentNullException("Strategy");
+
             _strategy = message.Strategy;
 
             foreach(var actor in _calcActors.Keys)
@@ -48,7 +51,7 @@ namespace YouScanTestAssesment.Actors
                 return _calcActors[Id];
             }
 
-            var actorProps = Context.DI().Props(typeof (CalculatingActor));
+            var actorProps = Context.DI().Props(typeof (T));
             var actorRef = Context.ActorOf(actorProps, "CalculatingActor-"+Id);
 
             if (_strategy.Strategy.ContainsKey(Id))

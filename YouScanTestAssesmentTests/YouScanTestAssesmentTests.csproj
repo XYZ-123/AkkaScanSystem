@@ -43,12 +43,28 @@
       <HintPath>..\packages\Akka.1.0.4\lib\net45\Akka.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Akka.DI.AutoFac, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.DI.AutoFac.1.0.4\lib\net45\Akka.DI.AutoFac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Akka.DI.Core, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.DI.Core.1.0.4\lib\net45\Akka.DI.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Akka.DI.TestKit, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.DI.TestKit.1.0.4\lib\net45\Akka.DI.TestKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Akka.TestKit, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Akka.TestKit.1.0.4\lib\net45\Akka.TestKit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.TestKit.Xunit2, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Akka.TestKit.Xunit2.1.0.4\lib\net45\Akka.TestKit.Xunit2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -84,7 +100,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CalculatingActorTests.cs" />
+    <Compile Include="CoordinatorActorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCalculatorActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

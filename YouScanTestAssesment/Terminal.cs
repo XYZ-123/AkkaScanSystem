@@ -22,7 +22,7 @@ namespace YouScanTestAssesment
         {
             system = ActorSystem.Create("Terminal");
             ConfigureDependecies();
-            coordinatorActor = system.ActorOf<CoordinatorActor>();
+            coordinatorActor = system.ActorOf<CoordinatorActor<CalculatingActor>>();
         }
 
         public async Task<double> Calculate(bool flush)
@@ -38,6 +38,8 @@ namespace YouScanTestAssesment
 
         public async Task SetPricing(PricingStrategy strategy)
         {
+            if (strategy == null)
+                throw new ArgumentNullException("strategy");
             coordinatorActor.Tell(new SetStrategyMessage(strategy));
         }
 
