@@ -54,7 +54,7 @@ namespace YouScanTestAssesmentTests
 
         }
         [Fact]
-        public void ShouldRReturnResult_If_FlushFlagIsReceived()
+        public void ShouldReturnResult_If_CalculateMessageIsReceived()
         {
             var expectedPrice = 1;
 
