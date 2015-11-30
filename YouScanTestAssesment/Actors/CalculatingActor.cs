@@ -14,12 +14,15 @@ namespace YouScanTestAssesment.Actors
 {
     public class CalculatingActor : ReceiveActor
     {
-        private int _positions;
-        private ItemPricing _pricing;
-        private readonly ICalculator _calculator;
+        protected int _positions;
+        protected ItemPricing _pricing;
+        protected readonly ICalculator _calculator;
 
         public CalculatingActor(ICalculator calculator)
         {
+            if (calculator == null)
+                throw new ArgumentException("calculator");
+
             _calculator = calculator;
             Receive<ScanMessage>(message => HandleScanMessage(message));
             Receive<SetPricingMessage>(message => HandlePricingMessage(message));
@@ -35,7 +38,6 @@ namespace YouScanTestAssesment.Actors
         }
         public void HandleCalculateMessage(CalculateMessage message)
         {
-
             var amount = _calculator.Calculate(_positions, _pricing);
 
             if (message.Flush)
