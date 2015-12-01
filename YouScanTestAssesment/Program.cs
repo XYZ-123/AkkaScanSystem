@@ -22,7 +22,6 @@ namespace YouScanTestAssesment
                     }
                 };
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 t.SetPricing(ps);
 
                 t.Scan("A");
@@ -53,7 +52,6 @@ namespace YouScanTestAssesment
                 Console.WriteLine("ABCD, price {0}", amount);
                 Console.ReadKey();
             }
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
     }
 }

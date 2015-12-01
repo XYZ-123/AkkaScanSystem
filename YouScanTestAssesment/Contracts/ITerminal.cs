@@ -9,8 +9,8 @@ namespace YouScanTestAssesment.Contracts
 {
     interface ITerminal
     {
-        Task SetPricing(PricingStrategy strategy);
-        Task Scan(string Id);
+        void SetPricing(PricingStrategy strategy);
+        void Scan(string Id);
         Task<double> Calculate(bool flush);
     }
 }

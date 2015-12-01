@@ -31,12 +31,12 @@ namespace YouScanTestAssesment
            return result;
         }
 
-        public async Task Scan(string Id)
+        public void Scan(string Id)
         {
             coordinatorActor.Tell(new ScanMessage(Id));
         }
 
-        public async Task SetPricing(PricingStrategy strategy)
+        public void SetPricing(PricingStrategy strategy)
         {
             if (strategy == null)
                 throw new ArgumentNullException("strategy");
