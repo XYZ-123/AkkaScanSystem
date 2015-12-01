@@ -1,27 +1,16 @@
-﻿using Akka.Actor;
+﻿using Akka.TestKit;
+using Akka.TestKit.Xunit2;
 using Moq;
-using System;
 using Xunit;
-using Akka.TestKit;
 using YouScanTestAssesment.Actors;
 using YouScanTestAssesment.Contracts;
 using YouScanTestAssesment.Messages;
 using YouScanTestAssesment.Strategy;
-using Akka.TestKit.Xunit2;
 
 namespace YouScanTestAssesmentTests
 {
     public class CalculatingActorTests : TestKit
     {
-        public  class CalculatingActorSUT : CalculatingActor
-        {
-            public  CalculatingActorSUT(ICalculator calc):base(calc)
-            {
-            }
-            internal int Count { get { return _positions; } }
-            internal ItemPricing Pricing { get { return _pricing; } }
-        }
-
         private readonly Mock<ICalculator> calcMock;
 
         private readonly TestActorRef<CalculatingActorSUT> sut;
@@ -29,7 +18,7 @@ namespace YouScanTestAssesmentTests
         public CalculatingActorTests()
         {
             calcMock = new Mock<ICalculator>();
-            sut = ActorOfAsTestActorRef<CalculatingActorSUT>(()=> new CalculatingActorSUT(calcMock.Object), "sut");
+            sut = ActorOfAsTestActorRef(() => new CalculatingActorSUT(calcMock.Object), "sut");
         }
 
         [Fact]
@@ -38,9 +27,8 @@ namespace YouScanTestAssesmentTests
             string id = "A";
             var scanMessage = new ScanMessage(id);
             sut.Tell(scanMessage);
-            
+
             Assert.Equal(1, sut.UnderlyingActor.Count);
-             
         }
 
         [Fact]
@@ -51,8 +39,8 @@ namespace YouScanTestAssesmentTests
             sut.Tell(new SetPricingMessage(expectedPricing));
 
             Assert.Equal(expectedPricing, sut.UnderlyingActor.Pricing);
-
         }
+
         [Fact]
         public void ShouldReturnResult_If_CalculateMessageIsReceived()
         {
@@ -70,8 +58,8 @@ namespace YouScanTestAssesmentTests
             var actual = ExpectMsg<double>();
 
             Assert.Equal(expectedPrice, actual);
-
         }
+
         [Fact]
         public void ShouldResetPositions_If_FlushFlagIsReceived()
         {
@@ -82,7 +70,24 @@ namespace YouScanTestAssesmentTests
             sut.Tell(new CalculateMessage(true));
 
             Assert.Equal(0, sut.UnderlyingActor.Count);
+        }
 
+        public class CalculatingActorSUT : CalculatingActor
+        {
+            public CalculatingActorSUT(ICalculator calc)
+                : base(calc)
+            {
+            }
+
+            internal int Count
+            {
+                get { return _positions; }
+            }
+
+            internal ItemPricing Pricing
+            {
+                get { return _pricing; }
+            }
         }
     }
 }

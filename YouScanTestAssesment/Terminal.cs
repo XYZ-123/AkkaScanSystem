@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Akka.Actor;
 using Akka.DI.AutoFac;
@@ -31,16 +28,33 @@ namespace YouScanTestAssesment
            return result;
         }
 
-        public async Task Scan(string Id)
+        public async Task Scan(string id)
         {
-            coordinatorActor.Tell(new ScanMessage(Id));
+            coordinatorActor.Tell(new ScanMessage(id));
         }
 
         public async Task SetPricing(PricingStrategy strategy)
         {
             if (strategy == null)
+            {
                 throw new ArgumentNullException("strategy");
+            }
+
             coordinatorActor.Tell(new SetStrategyMessage(strategy));
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                system.Dispose();
+            }
         }
 
         private void ConfigureDependecies()
@@ -51,11 +65,6 @@ namespace YouScanTestAssesment
             var container = builder.Build();
 
             var resolver = new AutoFacDependencyResolver(container, system);
-        }
-
-        public void Dispose()
-        {
-            system.Dispose();
         }
     }
 }

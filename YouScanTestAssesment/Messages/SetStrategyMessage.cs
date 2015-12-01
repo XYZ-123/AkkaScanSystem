@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YouScanTestAssesment.Strategy;
+﻿using YouScanTestAssesment.Strategy;
 
 namespace YouScanTestAssesment.Messages
 {
@@ -13,6 +8,7 @@ namespace YouScanTestAssesment.Messages
         {
             Strategy = strategy;
         }
+
         public PricingStrategy Strategy { get; private set; }
     }
 }

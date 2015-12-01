@@ -1,18 +1,19 @@
 ﻿using System;
-using Akka.Actor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Akka.Actor;
 using Akka.DI.Core;
 using YouScanTestAssesment.Messages;
 using YouScanTestAssesment.Strategy;
 
 namespace YouScanTestAssesment.Actors
 {
-    public class CoordinatorActor<T>: ReceiveActor where T :ReceiveActor
+    public class CoordinatorActor<T> : ReceiveActor
+        where T : ReceiveActor
     {
-        protected PricingStrategy _strategy = PricingStrategy.Default;
         protected readonly Dictionary<string, IActorRef> _calcActors = new Dictionary<string, IActorRef>();
+        protected PricingStrategy _strategy = PricingStrategy.Default;
 
         public CoordinatorActor()
         {
@@ -24,13 +25,15 @@ namespace YouScanTestAssesment.Actors
         public void HandleSetStrategyMessage(SetStrategyMessage message)
         {
             if (message.Strategy == null)
+            {
                 throw new ArgumentNullException("Strategy");
+            }
 
             _strategy = message.Strategy;
 
-            foreach(var actor in _calcActors.Keys)
+            foreach (var actor in _calcActors.Keys)
             {
-                if(_strategy.Strategy.ContainsKey(actor))
+                if (_strategy.Strategy.ContainsKey(actor))
                 {
                     _calcActors[actor].Forward(new SetPricingMessage(_strategy.Strategy[actor]));
                 }
@@ -44,25 +47,6 @@ namespace YouScanTestAssesment.Actors
             actor.Forward(message);
         }
 
-        private IActorRef GetOrCreateActor(string Id)
-        {
-            if(_calcActors.ContainsKey(Id))
-            {
-                return _calcActors[Id];
-            }
-
-            var actorProps = Context.DI().Props(typeof (T));
-            var actorRef = Context.ActorOf(actorProps, "CalculatingActor-"+Id);
-
-            if (_strategy.Strategy.ContainsKey(Id))
-            {
-                actorRef.Forward(new SetPricingMessage(_strategy.Strategy[Id]));
-            }
-
-            _calcActors.Add(Id, actorRef);
-
-            return actorRef;
-        }
         public async Task HandleCalculateMessage(CalculateMessage message)
         {
             double amount = 0.0;
@@ -76,8 +60,28 @@ namespace YouScanTestAssesment.Actors
                 var results = await Task.WhenAll(tasks);
                 amount = results.Aggregate((res1, res2) => res1 + res2);
             });
-                     
+
             sender.Tell(amount, self);
+        }
+
+        private IActorRef GetOrCreateActor(string id)
+        {
+            if (_calcActors.ContainsKey(id))
+            {
+                return _calcActors[id];
+            }
+
+            var actorProps = Context.DI().Props(typeof(T));
+            var actorRef = Context.ActorOf(actorProps, "CalculatingActor-" + id);
+
+            if (_strategy.Strategy.ContainsKey(id))
+            {
+                actorRef.Forward(new SetPricingMessage(_strategy.Strategy[id]));
+            }
+
+            _calcActors.Add(id, actorRef);
+
+            return actorRef;
         }
     }
 }

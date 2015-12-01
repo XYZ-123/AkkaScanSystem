@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace YouScanTestAssesment.Strategy
+﻿namespace YouScanTestAssesment.Strategy
 {
     public struct BatchPricing
     {
@@ -13,7 +7,9 @@ namespace YouScanTestAssesment.Strategy
             Quantity = quantity;
             Price = price;
         }
+
         public int Quantity { get; private set; }
+
         public double Price { get; private set; }
     }
 }
