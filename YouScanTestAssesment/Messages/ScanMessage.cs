@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace YouScanTestAssesment.Messages
+﻿namespace YouScanTestAssesment.Messages
 {
     public class ScanMessage
     {
@@ -15,5 +9,4 @@ namespace YouScanTestAssesment.Messages
 
         public string Id { get; private set; }
     }
-
 }

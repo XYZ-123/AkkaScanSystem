@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace YouScanTestAssesment.Strategy
 {
     public class PricingStrategy
     {
+        public static PricingStrategy Default => new PricingStrategy { Strategy = new Dictionary<string, ItemPricing>() };
+
         public Dictionary<string, ItemPricing> Strategy { get; set; }
-
-        public static PricingStrategy Default => new PricingStrategy {Strategy = new Dictionary<string, ItemPricing>()};
-
     }
 }
