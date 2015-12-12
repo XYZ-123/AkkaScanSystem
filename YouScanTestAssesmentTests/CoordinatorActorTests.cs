@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Akka.Actor;
 using Akka.DI.AutoFac;
+using Akka.Event;
 using Akka.TestKit;
 using Akka.TestKit.Xunit2;
 using Autofac;
@@ -56,8 +57,10 @@ namespace YouScanTestAssesmentTests
         public void ShouldSendScanMessageToChildActor_OnScanMessage()
         {
             sut.Tell(new ScanMessage(testId));
+            var probe = CreateTestProbe();
 
-            var message = ExpectMsg<ScanMessage>();
+            Sys.EventStream.Subscribe(probe,typeof(ScanMessage));
+            var message = probe.ExpectMsg<ScanMessage>();
 
             Assert.Equal(testId, message.Id);
         }
@@ -69,7 +72,11 @@ namespace YouScanTestAssesmentTests
 
             sut.Tell(new ScanMessage(testId));
 
-            var message = ExpectMsg<SetPricingMessage>();
+
+            var probe = CreateTestProbe();
+
+            Sys.EventStream.Subscribe(probe, typeof(SetPricingMessage));
+            var message = probe.ExpectMsg<SetPricingMessage>();
 
             Assert.Equal(ps.Strategy[testId], message.Pricing);
         }
@@ -89,15 +96,14 @@ namespace YouScanTestAssesmentTests
 
             sut.Tell(new SetStrategyMessage(ps));
 
-            // First, we have to skip previously sent scan message
-            ExpectMsg<ScanMessage>();
+            var probe = CreateTestProbe();
 
-            var message = ExpectMsg<SetPricingMessage>();
+            Sys.EventStream.Subscribe(probe, typeof(SetPricingMessage));
+            var message = probe.ExpectMsg<SetPricingMessage>();
 
             Assert.Equal(ps.Strategy[testId], message.Pricing);
         }
-
-        /*Uncomment when Akka starts to work fine with async/await
+/*
         [Fact]
         public void ShouldReturnAggergatedPricing_FromChildActors()
         {
@@ -105,12 +111,18 @@ namespace YouScanTestAssesmentTests
             sut.Tell(new ScanMessage(testId));
             sut.Tell(new ScanMessage("b"));
             sut.Tell(new CalculateMessage(true));
-            ExpectMsg<ScanMessage>();
-            ExpectMsg<ScanMessage>();
-            var msg = ExpectMsg<double>();
-            Assert.Equal(20, msg);
-        }*/
+            var probe = CreateTestProbe();
 
+            Sys.EventStream.Subscribe(probe, typeof(SetPricingMessage));
+            Sys.EventStream.Subscribe(probe, typeof(ScanMessage));
+            probe.ExpectMsg<ScanMessage>();
+            probe.ExpectMsg<ScanMessage>();
+            probe.ExpectMsg<ScanMessage>();
+            var msg = FishForMessage<double>(message => true);
+            //var msg = probe.ExpectMsg<double>();
+            Assert.Equal(10, msg);
+        }
+        */
         private void ConfigureDependencies()
         {
             var builder = new ContainerBuilder();

@@ -14,16 +14,19 @@ namespace YouScanTestAssesmentTests.TestActors
 
         public void HandleScanMessage(ScanMessage message)
         {
+            Context.System.EventStream.Publish(message);
             Sender.Tell(message, Self);
         }
 
         public void HandlePricingMessage(SetPricingMessage message)
         {
+            Context.System.EventStream.Publish(message);
             Sender.Tell(message, Self);
         }
 
         public void HandleCalculateMessage(CalculateMessage message)
         {
+            Context.System.EventStream.Publish(10);
             Sender.Tell(10, Self);
         }
     }

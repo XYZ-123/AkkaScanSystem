@@ -35,7 +35,7 @@ namespace YouScanTestAssesment.Actors
             {
                 if (_strategy.Strategy.ContainsKey(actor))
                 {
-                    _calcActors[actor].Forward(new SetPricingMessage(_strategy.Strategy[actor]));
+                    _calcActors[actor].Tell(new SetPricingMessage(_strategy.Strategy[actor]));
                 }
             }
         }
@@ -44,7 +44,7 @@ namespace YouScanTestAssesment.Actors
         {
             var actor = GetOrCreateActor(message.Id);
 
-            actor.Forward(message);
+            actor.Tell(message);
         }
 
         public async Task HandleCalculateMessage(CalculateMessage message)
@@ -76,7 +76,7 @@ namespace YouScanTestAssesment.Actors
 
             if (_strategy.Strategy.ContainsKey(id))
             {
-                actorRef.Forward(new SetPricingMessage(_strategy.Strategy[id]));
+                actorRef.Tell(new SetPricingMessage(_strategy.Strategy[id]));
             }
 
             _calcActors.Add(id, actorRef);
